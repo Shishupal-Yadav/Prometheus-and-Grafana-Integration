@@ -11,7 +11,7 @@ Prometheus collects metrics from monitored targets by scraping metrics from HTTP
 Like any server running processes on a host machine, there are specific metrics that need to be monitored such as used memory and storage as well as general ones reporting on the status of the service. Conveniently, Prometheus exposes a wide variety of metrics that can be easily monitored. By adding Grafana as a visualization layer, we can easily set up a monitoring stack for our monitoring stack.
 # What is Prometheus?
 
-![alt text](https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Prometheus_software_logo.svg/1024px-Prometheus_software_logo.svg.png)
+![alt text](https://www.booleanworld.com/wp-content/uploads/2018/02/prometheus-cover-final.png)
 
 Prometheus is an open-source systems monitoring and alerting toolkit originally built at SoundCloud. Since its inception in 2012, many companies and organizations have adopted Prometheus, and the project has a very active developer and user community. It is now a standalone open source project and maintained independently of any company.
 # Prometheus main features are:
@@ -26,7 +26,7 @@ multiple modes of graphing and dashboarding support
 
 # What is Grafana?
 
-![alt text](https://xebialabs.com/wp-content/uploads/files/tool-chest/grafana.jpg)
+![alt text](https://upload.wikimedia.org/wikipedia/commons/9/9d/Grafana_logo.png)
 
 Grafana is open source visualization and analytics software. It allows you to query, visualize, alert on, and explore your metrics no matter where they are stored. In plain English, it provides you with tools to turn your time-series database (TSDB) data into beautiful graphs and visualizations.
 

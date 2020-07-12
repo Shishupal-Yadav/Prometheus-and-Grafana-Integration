@@ -51,8 +51,8 @@ In last portion of file I have created a deployment for prometheus , using the r
 I have used the prometheus pre created iamge from docker hub
 
 *Here is the code for creating all the stuff mentioned above*
-
-```apiVersion: v1
+```
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
     name: prometheus-pvc
@@ -112,14 +112,16 @@ spec:
       volumes:
       - name: prometheus-persistent-storage
         persistentVolumeClaim:
-          claimName: prometheus-pvc ```
+          claimName: prometheus-pvc 
+```
 
          
          
 **Step 2** Similarly for Grafana I have created a single file for Grafana , first I have created Persistent Volume , then I created Service and exposed graphana to outside world
 and atlast I have created a deployment 
 *Here is code for all the stuff mentioned above*
-``` apiVersion: v1
+```
+ apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
      name: grafana-pvc
@@ -179,16 +181,17 @@ spec:
       volumes:
       - name: grafana-persistent-storage
         persistentVolumeClaim:
-          claimName: grafana-pvc ```
-          
+          claimName: grafana-pvc 
+```
 **Step 3** At last I have created a kustomization file , it will run the   above file automatically  in a sequence(we have written in kustomization file)  rather than doing it manually.
-
-``` apiVersion: kustomize.config.k8s.io/v1beta1
+```
+ apiVersion: kustomize.config.k8s.io/v1beta1
  kind: Kustomization
 
  resources:
    - prometheus.yml
-   - grafana.yml ```
+   - grafana.yml 
+```
 We just  have to run only one command:
 **kubectl apply -k .**
 
@@ -205,6 +208,9 @@ We just  have to run only one command:
 *Now here type minikubeIP:Port(seperately for grafana and prometheus) in your browser we will get Grafana and Prometheus output as:
 
 ![Grafana](/Images/Grafana.jpg)
+
+
+
 
 ![Prometheus](/Images/prometheus.jpg)
 

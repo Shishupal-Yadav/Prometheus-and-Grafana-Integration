@@ -51,7 +51,8 @@ In last portion of file I have created a deployment for prometheus , using the r
 I have used the prometheus pre created iamge from docker hub
 
 *Here is the code for creating all the stuff mentioned above*
-***apiVersion: v1
+
+>apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
     name: prometheus-pvc
@@ -111,33 +112,34 @@ spec:
       volumes:
       - name: prometheus-persistent-storage
         persistentVolumeClaim:
-          claimName: prometheus-pvc***
+          claimName: prometheus-pvc
+
          
          
 **Step 2** Similarly for Grafana I have created a single file for Grafana , first I have created Persistent Volume , then I created Service and exposed graphana to outside world
 and atlast I have created a deployment 
 *Here is code for all the stuff mentioned above*
-***apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-    name: grafana-pvc
-    labels:
-        name: grafanapvc
-spec:
-   accessModes:
-    - ReadWriteOnce
-   resources:
-     requests:
-        storage: 10Gi
+> apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+     name: grafana-pvc
+     labels:
+         name: grafanapvc
+  spec:
+    accessModes:
+     - ReadWriteOnce
+    resources:
+      requests:
+         storage: 10Gi
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: grafana-service
-  labels:
-    app: graf-service
-spec:
-  selector:
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: grafana-service
+     labels:
+      app: graf-service
+  spec:
+   selector:
     app: grafana
   type: NodePort
   ports:
@@ -177,10 +179,17 @@ spec:
       volumes:
       - name: grafana-persistent-storage
         persistentVolumeClaim:
-          claimName: grafana-pvc***
+          claimName: grafana-pvc
           
 **Step 3** At last I have created a kustomization file , it will run the   above file automatically  in a sequence(we have written in kustomization file)  rather than doing it manually.
-We just  have to write only one command:
+
+>apiVersion: kustomize.config.k8s.io/v1beta1
+ kind: Kustomization
+
+ resources:
+   - prometheus.yml
+   - grafana.yml
+We just  have to run only one command:
 **kubectl apply -k .**
 
 ***This command should be run in the folder, where this file is present using Command Prompt**
@@ -188,17 +197,20 @@ We just  have to write only one command:
 
 
 *Here our pods created*
+
+
 ![Pods](/Images/3.jpg)
 
 
 *Now here type minikubeIP:Port(seperately for grafana and prometheus) in your browser we will get Grafana and Prometheus output as:
-![Grafana](/Images/Grafana)
 
-![Prometheus](/Images/prometheus)
+![Grafana](/Images/Grafana.jpg)
+
+![Prometheus](/Images/prometheus.jpg)
 
 
 *At last I created one dashboard as an example using some query*
-![Integ](/Images/Prom-integ)
+![Integ](/Images/Prom-integ.jpg)
          
          
          

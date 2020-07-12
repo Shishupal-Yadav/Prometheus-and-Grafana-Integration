@@ -44,4 +44,161 @@ Integrate Prometheus and Grafana and perform in following way:
 3.  And both of them should be exposed to outside world
 
 # Let,s start our project
+**Step 1:**
+First , by this single file I have created Persistent Volume which will be used by Prometheus as a permanent storage, so no data will be lost  even after rebooting.
+Next in the same file I have created a service for exposing our prometheus using NodePort , this will expose our prometheus to outside world.
+In last portion of file I have created a deployment for prometheus , using the recreate concept , it will automatically again do the deployment if our prometheus goes down.
+I have used the prometheus pre created iamge from docker hub
 
+*Here is the code for creating all the stuff mentioned above*
+***apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: prometheus-pvc
+    labels:
+        name: prometheuspvc
+spec:
+   accessModes:
+    - ReadWriteOnce
+   resources:
+     requests:
+        storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-service
+  labels:
+    app: prom-service
+spec:
+  selector:
+    app: prometheus
+  type: NodePort
+  ports:
+    - nodePort: 30002
+      port: 9090
+      targetPort: 9090
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: prometheus-deploy
+  labels:
+    app: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+      tier: monitoring
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: prometheus
+        tier: monitoring
+    spec:
+      containers:
+      - image: vimal13/prometheus
+        name: prom-cont
+        ports:
+        - containerPort: 9090
+          name: prom-cont
+        volumeMounts:
+        - name: prometheus-persistent-storage
+          mountPath: /data
+      volumes:
+      - name: prometheus-persistent-storage
+        persistentVolumeClaim:
+          claimName: prometheus-pvc***
+         
+         
+**Step 2** Similarly for Grafana I have created a single file for Grafana , first I have created Persistent Volume , then I created Service and exposed graphana to outside world
+and atlast I have created a deployment 
+*Here is code for all the stuff mentioned above*
+***apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: grafana-pvc
+    labels:
+        name: grafanapvc
+spec:
+   accessModes:
+    - ReadWriteOnce
+   resources:
+     requests:
+        storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-service
+  labels:
+    app: graf-service
+spec:
+  selector:
+    app: grafana
+  type: NodePort
+  ports:
+    - nodePort: 30001
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: grafana-deploy
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+      tier: visualization
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: grafana
+        tier: visualization
+    spec:
+      containers:
+      - image: vimal13/grafana
+        name: graf-cont
+        ports:
+        - containerPort: 3000
+          name: graf-cont
+        volumeMounts:
+        - name: grafana-persistent-storage
+          mountPath: /var/lib/grafana
+      volumes:
+      - name: grafana-persistent-storage
+        persistentVolumeClaim:
+          claimName: grafana-pvc***
+          
+**Step 3** At last I have created a kustomization file , it will run the   above file automatically  in a sequence(we have written in kustomization file)  rather than doing it manually.
+We just  have to write only one command:
+**kubectl apply -k .**
+
+***This command should be run in the folder, where this file is present using Command Prompt**
+![GitHub Logo](/Images/2.jpg)
+
+
+*Here our pods created*
+![Pods](/Images/3.jpg)
+
+
+*Now here type minikubeIP:Port(seperately for grafana and prometheus) in your browser we will get Grafana and Prometheus output as:
+![Grafana](/Images/Grafana)
+
+![Prometheus](/Images/prometheus)
+
+
+*At last I created one dashboard as an example using some query*
+![Integ](/Images/Prom-integ)
+         
+         
+         

@@ -26,7 +26,7 @@ multiple modes of graphing and dashboarding support
 
 # What is Grafana?
 
-![alt text](https://upload.wikimedia.org/wikipedia/en/thumb/a/a1/Grafana_logo.svg/800px-Grafana_logo.svg.png)
+![alt text](https://xebialabs.com/wp-content/uploads/files/tool-chest/grafana.jpg)
 
 Grafana is open source visualization and analytics software. It allows you to query, visualize, alert on, and explore your metrics no matter where they are stored. In plain English, it provides you with tools to turn your time-series database (TSDB) data into beautiful graphs and visualizations.
 

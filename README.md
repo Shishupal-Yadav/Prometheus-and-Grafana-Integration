@@ -52,67 +52,67 @@ I have used the prometheus pre created iamge from docker hub
 
 *Here is the code for creating all the stuff mentioned above*
 
->apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-    name: prometheus-pvc
-    labels:
-        name: prometheuspvc
-spec:
-   accessModes:
-    - ReadWriteOnce
-   resources:
-     requests:
-        storage: 10Gi
+>-apiVersion: v1
+-kind: PersistentVolumeClaim
+-metadata:
+    -name: prometheus-pvc
+    -labels:
+        -name: prometheuspvc
+-spec:
+   -accessModes:
+    -- ReadWriteOnce
+   -resources:
+     -requests:
+        -storage: 10Gi
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: prometheus-service
-  labels:
-    app: prom-service
-spec:
-  selector:
-    app: prometheus
-  type: NodePort
-  ports:
-    - nodePort: 30002
-      port: 9090
-      targetPort: 9090
+-apiVersion: v1
+-kind: Service
+-metadata:
+  -name: prometheus-service
+  -labels:
+    -app: prom-service
+-spec:
+  -selector:
+    -app: prometheus
+  -type: NodePort
+  -ports:
+   - - nodePort: 30002
+     - port: 9090
+      -targetPort: 9090
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
-kind: Deployment
-metadata:
-  name: prometheus-deploy
-  labels:
-    app: prometheus
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: prometheus
-      tier: monitoring
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        app: prometheus
-        tier: monitoring
-    spec:
-      containers:
-      - image: vimal13/prometheus
-        name: prom-cont
-        ports:
-        - containerPort: 9090
-          name: prom-cont
-        volumeMounts:
-        - name: prometheus-persistent-storage
-          mountPath: /data
-      volumes:
-      - name: prometheus-persistent-storage
-        persistentVolumeClaim:
-          claimName: prometheus-pvc
+-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+-kind: Deployment
+-metadata:
+  -name: prometheus-deploy
+  -labels:
+    -app: prometheus
+-spec:
+  -replicas: 1
+  -selector:
+    -matchLabels:
+      -app: prometheus
+      -tier: monitoring
+  -strategy:
+    -type: Recreate
+  -template:
+    -metadata:
+      -labels:
+        -app: prometheus
+        -tier: monitoring
+    -spec:
+      -containers:
+      -- image: vimal13/prometheus
+        -name: prom-cont
+        -ports:
+        -- containerPort: 9090
+          -name: prom-cont
+        -volumeMounts:
+        -- name: prometheus-persistent-storage
+          -mountPath: /data
+      -volumes:
+      -- name: prometheus-persistent-storage
+        -persistentVolumeClaim:
+          -claimName: prometheus-pvc
 
          
          
